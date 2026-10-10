@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+  <rect width="48" height="48" rx="12" fill="#8B5E3C"/>
+  <!-- Elegant Arabian Camel Silhouette -->
+  <path d="M12 36V30C12 28.5 13.5 27 15 27C17.5 27 19 23 21.5 23C24 23 25.5 27 29.5 27C32.5 27 34.5 20 37.5 20C40 20 41.5 23.5 43.5 23.5C45 23.5 46 21 46 18C46 15 44.5 14 42 14C39 14 36.5 10 35 7.5C34.5 6.5 32.5 6.5 31.5 7.5C30 9 31 11.5 33 13L30 18C27 18 24.5 17 22 17C17.5 17 15 21 12 21C9.5 21 8 25 7 28" stroke="#F8F4EF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="33.5" cy="9" r="1" fill="#C88F45"/>
+  <path d="M14 36V40M20 36V40M31 36V40M38 36V40" stroke="#F8F4EF" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

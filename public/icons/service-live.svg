@@ -1,0 +1,16 @@
+<svg width="112" height="112" viewBox="0 0 112 112" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="56" cy="56" r="56" fill="url(#live_grad)"/>
+  <!-- Broadcast / LIVE Icon -->
+  <rect x="30" y="46" width="52" height="34" rx="8" stroke="#121212" stroke-width="4.5"/>
+  <text x="56" y="69" text-anchor="middle" fill="#121212" font-size="16" font-weight="900" font-family="sans-serif" letter-spacing="1.5">
+    LIVE
+  </text>
+  <path d="M44 34C40 38 40 41 40 41M68 34C72 38 72 41 72 41M36 28C30 34 30 40 30 40M76 28C82 34 82 40 82 40" stroke="#121212" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="56" cy="36" r="3.5" fill="#121212"/>
+  <defs>
+    <linearGradient id="live_grad" x1="56" y1="0" x2="56" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7F7F7"/>
+      <stop offset="1" stop-color="#D1D1D1"/>
+    </linearGradient>
+  </defs>
+</svg>

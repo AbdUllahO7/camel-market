@@ -1,0 +1,13 @@
+<svg width="136" height="136" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="68" cy="68" r="68" fill="url(#auctions_grad)"/>
+  <!-- Auction Gavel Icon -->
+  <path d="M78 40L90 52M66 52L78 64M62 48L84 70L76 78L54 56L62 48Z" stroke="#121212" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M65 67L48 84C46 86 46 89 48 91C50 93 53 93 55 91L72 74" stroke="#121212" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M42 96H74" stroke="#121212" stroke-width="5" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="auctions_grad" x1="68" y1="0" x2="68" y2="136" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7F7F7"/>
+      <stop offset="1" stop-color="#D1D1D1"/>
+    </linearGradient>
+  </defs>
+</svg>

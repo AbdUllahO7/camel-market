@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  /* ألوان الهوية البصرية لمنصة سوق الإبل */
+  --brand-primary: #8B5E3C;       /* بني برونزي صحراوي فاخر */
+  --brand-secondary: #D2B48C;     /* بيج رملي دافئ */
+  --brand-medium: #C88F45;        /* ذهبي كهرماني */
+  --brand-light: #EED9C4;         /* رملي فاتح ناعم */
+  --brand-surface: #F8F4EF;       /* عاجي صحراوي */
+  --brand-bg: #120F0C;
+  --brand-text-primary: #F8F4EF;
+  --brand-text-secondary: #D2B48C;
+  --brand-border: #8B5E3C;
+
+  --background: #0E0C0A;
+  --foreground: #F8F4EF;
+}
+
+/* تمرير سلس مع إزاحة لهيدر التثبيت العلوي */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 140px;
+}
+
+/* إخفاء أشرطة التمرير عبر جميع المتصفحات مع الحفاظ على وظيفة السحب */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@theme inline {
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-medium: var(--brand-medium);
+  --color-brand-light: var(--brand-light);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-border: var(--brand-border);
+  --font-cairo: var(--font-cairo);
+}
+
+body {
+  background-color: #000000;
+  color: #FFFFFF;
+  font-family: var(--font-cairo), sans-serif;
+  min-height: 100vh;
+}
+
+/* حل مشكلة تباين نصوص الإدخال والإكمال التلقائي في الوضع الليلي */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #FFFFFF !important;
+  -webkit-box-shadow: 0 0 0px 1000px #181818 inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  color: #FFFFFF !important;
+}
+
+input, select, textarea {
+  color: #FFFFFF;
+}
+
+::placeholder {
+  color: #94A3B8 !important;
+  opacity: 1;
+}

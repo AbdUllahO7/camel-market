@@ -1,0 +1,74 @@
+:root {
+  /* ألوان الهوية الافتراضية (سوق الإبل) */
+  --brand-primary: #8B5E3C;       /* بني برونزي صحراوي فاخر */
+  --brand-secondary: #D2B48C;     /* بيج رملي دافئ */
+  --brand-medium: #C88F45;        /* ذهبي كهرماني */
+  --brand-light: #EED9C4;         /* رملي فاتح ناعم */
+  --brand-surface: #F8F4EF;       /* عاجي صحراوي */
+  --brand-bg: #120F0C;
+  --brand-text-primary: #F8F4EF;
+  --brand-text-secondary: #D2B48C;
+  --brand-border: #8B5E3C;
+
+  /* إعدادات الخطوط */
+  --font-main: 'Cairo', system-ui, -apple-system, sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* الظلال وحواف البطاقات */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 12px 30px rgba(139, 94, 60, 0.2);
+
+  --transition-fast: 0.15s ease-in-out;
+  --transition-base: 0.25s ease-in-out;
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* سمة سوق الإبل */
+[data-theme='Camels'] {
+  --brand-primary: #2B2B2B;
+  --brand-secondary: #616161;
+  --brand-medium: #8E8E8E;
+  --brand-light: #D1D1D1;
+  --brand-surface: #F7F7F7;
+  --brand-bg: #FFFFFF;
+  --brand-text-primary: #2B2B2B;
+  --brand-text-secondary: #616161;
+  --brand-border: #E5E5E5;
+}
+
+/* سمة سوق الإبل */
+[data-theme='camels'] {
+  --brand-primary: #8B5E3C;
+  --brand-secondary: #D2B48C;
+  --brand-medium: #C88F45;
+  --brand-light: #EED9C4;
+  --brand-surface: #F8F4EF;
+  --brand-bg: #120F0C;
+  --brand-text-primary: #F8F4EF;
+  --brand-text-secondary: #D2B48C;
+  --brand-border: #8B5E3C;
+}
+
+/* سمة سوق الغنم */
+[data-theme='sheep'] {
+  --brand-primary: #1E2C22;
+  --brand-secondary: #496050;
+  --brand-medium: #7D9B86;
+  --brand-light: #D3E2D8;
+  --brand-surface: #F4F8F5;
+  --brand-bg: #FFFFFF;
+  --brand-text-primary: #1E2C22;
+  --brand-text-secondary: #496050;
+  --brand-border: #E1EBE4;
+}

@@ -1,0 +1,13 @@
+<svg width="112" height="112" viewBox="0 0 112 112" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="56" cy="56" r="56" fill="url(#Camels_grad)"/>
+  <!-- Horse & Jockey Icon -->
+  <path d="M32 72C40 66 48 68 52 64L62 54C66 50 71 49 76 50L82 52M82 52L86 42C86 42 80 38 72 42C65 44 60 49 55 55M82 52L85 62M52 64L44 80M62 54L66 70L74 80" stroke="#121212" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="60" cy="34" r="5.5" stroke="#121212" stroke-width="4"/>
+  <path d="M57 39L63 46L70 45" stroke="#121212" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="Camels_grad" x1="56" y1="0" x2="56" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7F7F7"/>
+      <stop offset="1" stop-color="#D1D1D1"/>
+    </linearGradient>
+  </defs>
+</svg>
