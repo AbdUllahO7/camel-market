@@ -21,6 +21,7 @@ import type { AuctionItem } from "@/features/auctions/types";
 export default function AuctionsPage() {
   const { user } = useAuth();
   const [auctions, setAuctions] = useState<AuctionItem[]>([]);
+  const [allAuctions, setAllAuctions] = useState<AuctionItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -45,6 +46,20 @@ export default function AuctionsPage() {
     };
   }, [searchQuery]);
 
+  const handleStatusChange = (newStatus: number | null) => {
+    setStatusFilter(newStatus);
+    // تصفية فورية من الذاكرة لتجنب الوميض وظهور "لا توجد نتائج" مؤقتاً
+    if (allAuctions.length > 0 && !debouncedSearch.trim()) {
+      if (newStatus === null) {
+        setAuctions(allAuctions);
+      } else if (newStatus === 2) {
+        setAuctions(allAuctions.filter((a) => Number(a.status) === 2));
+      } else if (newStatus === 3 || newStatus === 4) {
+        setAuctions(allAuctions.filter((a) => Number(a.status) === 3 || Number(a.status) === 4));
+      }
+    }
+  };
+
   const fetchAuctions = () => {
     setIsLoading(true);
     auctionsService.getAuctions({
@@ -56,6 +71,9 @@ export default function AuctionsPage() {
       .then((res) => {
         if (res.success && res.data) {
           setAuctions(res.data);
+          if (statusFilter === null && !debouncedSearch.trim()) {
+            setAllAuctions(res.data);
+          }
         }
       })
       .catch((err) => console.warn("Error fetching auctions:", err))
@@ -86,6 +104,9 @@ export default function AuctionsPage() {
     setSearchQuery("");
     setDebouncedSearch("");
     setStatusFilter(null);
+    if (allAuctions.length > 0) {
+      setAuctions(allAuctions);
+    }
   };
 
   const hasActiveFilters = debouncedSearch.trim().length > 0 || statusFilter !== null;
@@ -163,7 +184,7 @@ export default function AuctionsPage() {
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
-              onClick={() => setStatusFilter(null)}
+              onClick={() => handleStatusChange(null)}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 statusFilter === null
                   ? "bg-white text-black shadow-md"
@@ -175,7 +196,7 @@ export default function AuctionsPage() {
 
             <button
               type="button"
-              onClick={() => setStatusFilter(2)}
+              onClick={() => handleStatusChange(2)}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                 statusFilter === 2
                   ? "bg-emerald-500 text-black shadow-md"
@@ -188,7 +209,7 @@ export default function AuctionsPage() {
 
             <button
               type="button"
-              onClick={() => setStatusFilter(3)}
+              onClick={() => handleStatusChange(3)}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 statusFilter === 3
                   ? "bg-white text-black shadow-md"

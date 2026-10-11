@@ -41,16 +41,19 @@ export const useCustomerReviews = () => {
         await fetchReviews();
         return {
           success: true,
+          statusCode: res.statusCode,
           message: "تم إرسال تقييمك بنجاح.",
         };
       }
       return {
         success: false,
+        statusCode: res.statusCode,
         message: res.message || "فشل في إرسال التقييم.",
       };
     } catch (err) {
       return {
         success: false,
+        statusCode: 500,
         message: err instanceof Error ? err.message : "حدث خطأ أثناء إرسال التقييم.",
       };
     }

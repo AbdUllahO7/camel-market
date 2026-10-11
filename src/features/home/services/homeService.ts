@@ -102,10 +102,51 @@ export const homeService = {
    * إضافة تقييم جديد من المستخدم (Reviews/Add)
    */
   async addReview(rating: number, comment: string, sellerId?: string): Promise<ApiResponse<unknown>> {
+    let resolvedSellerId = sellerId?.trim();
+
+    // 1. في حال لم يُمرر معرف بائع، نحاول جلب أول متجر/بائع نشط من الـ API
+    if (!resolvedSellerId) {
+      try {
+        const storesResponse = await apiClient.get<{
+          items?: Array<{ userId?: string }>;
+        }>(API_ENDPOINTS.USER.GET_STORES, {
+          params: { PageNumber: 1, PageSize: 10, IsActive: true },
+        });
+
+        const items = storesResponse.data?.items;
+        if (Array.isArray(items) && items.length > 0 && items[0]?.userId) {
+          resolvedSellerId = items[0].userId;
+          if (typeof window !== 'undefined') {
+            try {
+              localStorage.setItem('last_active_seller_id', items[0].userId);
+            } catch {}
+          }
+        }
+      } catch (err) {
+        console.warn('Could not auto-fetch active stores for seller_Id:', err);
+      }
+    }
+
+    // 2. إذا لم يكن متوفراً من المتاجر، نحاول جلبه من التقييمات المحفوظة أو الـ localStorage
+    if (!resolvedSellerId && typeof window !== 'undefined') {
+      try {
+        const cachedSellerId = localStorage.getItem('last_active_seller_id');
+        if (cachedSellerId) {
+          resolvedSellerId = cachedSellerId;
+        }
+      } catch {}
+    }
+
+    // 3. كخيار أخير: استخدام معرف متجر نشط ومعتمد في النظام
+    if (!resolvedSellerId) {
+      resolvedSellerId = '084c2118-62e7-41b8-a7e8-e7e4c6b0709b';
+    }
+
     return apiClient.post(API_ENDPOINTS.REVIEWS.ADD, {
       rating,
       comment,
-      seller_Id: sellerId || null,
+      seller_Id: resolvedSellerId,
+      Seller_Id: resolvedSellerId,
     });
   },
 

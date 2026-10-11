@@ -13,7 +13,7 @@ export const WhyUsSection = () => {
       id: 'pro_display',
       title: t.whyUs.proDisplayTitle,
       description: t.whyUs.proDisplayDesc,
-      imgSrc: '/Camels/why-us-camel.png',
+      imgSrc: '/Camels/pro-display.svg',
     },
     {
       id: 'integrated_services',
@@ -46,7 +46,7 @@ export const WhyUsSection = () => {
       id: 'direct_chat',
       title: t.whyUs.directContactTitle,
       description: t.whyUs.directContactDesc,
-      imgSrc: '/Camels/why-us-camel-1.png',
+      imgSrc: '/Camels/direct-chat.svg',
     },
   ];
 
@@ -83,6 +83,7 @@ export const WhyUsSection = () => {
                     src={item.imgSrc}
                     alt={item.title}
                     fill
+                    unoptimized
                     className="object-contain p-2"
                   />
                 </div>
@@ -123,6 +124,7 @@ export const WhyUsSection = () => {
                     src={item.imgSrc}
                     alt={item.title}
                     fill
+                    unoptimized
                     className="object-contain p-2"
                   />
                 </div>

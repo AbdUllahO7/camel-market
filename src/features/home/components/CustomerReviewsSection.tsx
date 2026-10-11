@@ -88,7 +88,11 @@ export const CustomerReviewsSection = () => {
           setReviewMessage(null);
         }, 1500);
       } else {
-        setReviewMessage({ type: "error", text: res.message || "فشل في إرسال التقييم، يرجى المحاولة لاحقاً." });
+        const errorText =
+          res.statusCode === 401
+            ? "يرجى تسجيل الدخول بحسابك أولاً لتتمكن من إضافة تقييمك."
+            : res.message || "فشل في إرسال التقييم، يرجى المحاولة لاحقاً.";
+        setReviewMessage({ type: "error", text: errorText });
       }
     } catch {
       setReviewMessage({ type: "error", text: "حدث خطأ غير متوقع أثناء إرسال التقييم." });

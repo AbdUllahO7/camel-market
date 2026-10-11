@@ -54,40 +54,44 @@ export const GavelAuctionIcon: React.FC<IconProps> = ({ size = 28, className = '
 
 // 3. فقاعات المحادثة (تواصل مباشر)
 export const ChatDirectIcon: React.FC<IconProps> = ({ size = 28, className = '', color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+  <svg width={size} height={size} viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <path
-      d="M14 9C14 6.79086 11.7614 5 9 5C6.23858 5 4 6.79086 4 9C4 10.36 4.88 11.55 6.22 12.24L5.5 15L8.3 13.9C8.53 13.96 8.76 14 9 14C11.7614 14 14 12.2091 14 9Z"
+      d="M216 140V116C216 78 246 48 284 48H396C434 48 464 78 464 116V184L494 238L440 228C432 256 406 276 374 276H358"
       stroke={color}
-      strokeWidth="2"
+      strokeWidth="32"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
-      d="M14.5 14C14.7 14 14.85 13.97 15 13.93L17.5 15L16.85 12.55C18.15 11.9 19 10.75 19 9.5C19 8.6 18.5 7.8 17.7 7.2"
+      d="M104 464L174 400H286C325.765 400 358 367.765 358 328V212C358 172.235 325.765 140 286 140H110C70.2355 140 38 172.235 38 212V328C38 367.765 70.2355 400 110 400V464Z"
       stroke={color}
-      strokeWidth="2"
+      strokeWidth="32"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
+    <circle cx="125" cy="270" r="18" fill={color} />
+    <circle cx="198" cy="270" r="18" fill={color} />
+    <circle cx="271" cy="270" r="18" fill={color} />
   </svg>
 );
 
 // 4. الإبل الأصيلة (عرض احترافي للإبل)
 export const CamelProIcon: React.FC<IconProps> = ({ size = 28, className = '', color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+  <svg width={size} height={size} viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <path
-      d="M5 18V14C5 13 6 12 7 12C9 12 10 9 12 9C14 9 15 12 18 12C19.5 12 21 10 21 8C21 6.5 20 6 18.5 6C17 6 15.5 4 14.5 3C14 2 12.5 2 12 3C11 4.5 12 6.5 13 8L11 11C9 11 8 10 6 10C4 10 3 13 3 15"
-      stroke={color}
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      d="M 100 80 Q 100 110 70 110 Q 100 110 100 140 Q 100 110 130 110 Q 100 110 100 80 Z"
+      fill={color}
     />
-    <path
-      d="M6 18V21M10 18V21M15 18V21M19 18V21"
-      stroke={color}
-      strokeWidth="2"
-      strokeLinecap="round"
-    />
+    <circle cx="145" cy="75" r="8" fill={color} />
+    <g transform="translate(440, 50) scale(-10.8, 10.8)">
+      <path
+        fill={color}
+        d="M31.595 15.007c-1.75-3.623-5.934-9.053-9.531-9.053-4.071 0-8.228 7.259-10.071 10.378-.176.299-.321.578-.464.857-3.371-1.182-.536-6.631-.536-10.463 0-.957-.138-1.637-.44-2.119.489-.606.586-1.347.192-1.699-.413-.367-1.195-.163-1.745.456-.08.089-.129.186-.189.28-.424-.067-.903-.102-1.472-.102-.565 0-2.916.266-4.229.791C-.007 5.582.993 9 1.993 9h4c1 0 .756 2.31 0 4.726-.83 2.654-1.439 5.145-1 6.606.808 2.687 3.712 3.589 6.164 3.86 1.059 2.659 1.517 6.455 1.473 7.962-.059 2 1.94 2.059 1.999.059.036-1.211-.102-3.68.143-5.781.658 2.833.935 6.097.899 7.314-.059 1.998 1.94 2.057 1.999.059.047-1.602-.182-6.36.559-8.982.507.017 1.044.03 1.619.035 1.774.09 3.726.085 5.506-.015 1.05 1.592 1.996 2.991 1.982 3.435-.029 1-1.117 3.969-1.146 4.969-.029 1 .94 2.029 1.999.059.648-1.205 1.324-3.419 1.536-5.421.171.364.274.656.269.843-.029 1-.97 3.93-.999 4.93-.029.998.941 2.027 1.999.059 1.059-1.971 1.998-4.898 1.058-6.928-.797-1.72.431-4.165.824-7.914 1.082 1.665 1.117 3.351 1.118 3.459 0 .553.447 1 1 1 .553 0 1-.447 1-1-.001-.215-.067-4.85-4.399-7.327z"
+      />
+      <circle cx="8.2" cy="5.5" r="0.9" fill="#ffffff" />
+    </g>
+    <path d="M 65 440 H 447" stroke={color} strokeWidth="26" strokeLinecap="round" />
+    <path d="M 130 472 H 382" stroke={color} strokeWidth="18" strokeLinecap="round" />
   </svg>
 );
 export const HorseProIcon = CamelProIcon;

@@ -187,6 +187,44 @@ export const auctionsService = {
     }
 
     const statusVal = params?.Status !== undefined ? params.Status : (p?.status !== undefined ? p.status : (p?.isActive ? 2 : undefined));
+    
+    // في الـ Backend، المزادات المنتهية تنقسم إلى حالتين (3: مكتمل/مباع، 4: منتهي/ملغي/منتهي الوقت)
+    if (statusVal === 3 || statusVal === 4 || statusVal === 'ended') {
+      const [res3, res4] = await Promise.all([
+        apiClient.get<any>(API_ENDPOINTS.AUCTIONS.BASE, {
+          params: { ...queryParams, Status: 3 },
+        }),
+        apiClient.get<any>(API_ENDPOINTS.AUCTIONS.BASE, {
+          params: { ...queryParams, Status: 4 },
+        }),
+      ]);
+
+      const extractItems = (res: any) => {
+        if (!res?.success || !res?.data) return [];
+        if (Array.isArray(res.data)) return res.data;
+        if (Array.isArray(res.data.items)) return res.data.items;
+        if (Array.isArray(res.data.data)) return res.data.data;
+        return [];
+      };
+
+      const combined = [...extractItems(res3), ...extractItems(res4)];
+      const seen = new Set<any>();
+      const uniqueItems: any[] = [];
+      for (const item of combined) {
+        if (item && item.id !== undefined && !seen.has(item.id)) {
+          seen.add(item.id);
+          uniqueItems.push(item);
+        }
+      }
+
+      return {
+        success: res3.success || res4.success,
+        data: uniqueItems.map(mapBackendAuction),
+        statusCode: res4.statusCode || res3.statusCode,
+        message: res4.message || res3.message,
+      };
+    }
+
     if (statusVal !== undefined && statusVal !== null) {
       queryParams.Status = statusVal;
     }

@@ -94,8 +94,17 @@ class ApiClient {
           console.error('[apiClient SERVER ERROR]', response.status, JSON.stringify(data));
         }
         let errorMsg = data?.message;
-        if (!errorMsg && data?.errors && typeof data.errors === 'object') {
-          const vals = Object.entries(data.errors).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`);
+        const errObj =
+          data?.errors && typeof data.errors === 'object'
+            ? data.errors
+            : data && typeof data === 'object'
+            ? data
+            : null;
+        if (!errorMsg && errObj) {
+          const vals = Object.entries(errObj)
+            .filter(([k]) => !['statusCode', 'success', 'status', 'traceId', 'type'].includes(k))
+            .map(([, v]) => (Array.isArray(v) ? v.join(', ') : typeof v === 'string' ? v : ''))
+            .filter(Boolean);
           if (vals.length > 0) errorMsg = vals.join(' | ');
         }
         if (!errorMsg && data?.title) {

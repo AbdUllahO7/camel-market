@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Gavel, MapPin, ArrowUpRight, ShieldCheck, Clock } from "lucide-react";
 import type { AuctionItem } from "../types";
@@ -16,6 +16,7 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({
   onBidClick,
   onViewDetails,
 }) => {
+  const [imgSrc, setImgSrc] = useState(auction.coverImage || "/Camels/hero.png");
   const statusNum = Number(auction.status ?? 2);
   const isLive = statusNum === 2;
   const isEnded = statusNum === 3 || statusNum === 4;
@@ -34,10 +35,11 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({
       {/* 1. حاوية الصورة العلوية */}
       <div className="relative w-full aspect-[4/3] overflow-hidden bg-[#161616]">
         <Image
-          src={auction.coverImage || "/Camels/hero.png"}
+          src={imgSrc}
           alt={auction.title}
           fill
           priority
+          onError={() => setImgSrc("/Camels/hero.png")}
           className="object-cover group-hover:scale-105 transition-transform duration-700"
         />
 

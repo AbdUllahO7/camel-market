@@ -5,6 +5,26 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "api.camel.market",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "api.camel.market",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "camel.market",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.camel.market",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "api.Camels.market",
         pathname: "/**",
       },

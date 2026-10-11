@@ -20,6 +20,13 @@ function normalizeArabicText(text: string): string {
     .toLowerCase();
 }
 
+function toEnglishDigits(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 1632))
+    .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 1776));
+}
+
 interface CreateAuctionModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -44,7 +51,30 @@ export const CreateAuctionModal: React.FC<CreateAuctionModalProps> = ({
   const [description, setDescription] = useState("");
   const [address, setAddress] = useState("");
   const [startPrice, setStartPrice] = useState<number | "">("");
+  const [priceInput, setPriceInput] = useState<string>("");
   const [selectedPlanId, setSelectedPlanId] = useState<number | null>(null);
+
+  const handlePriceChange = (val: string) => {
+    const englishVal = toEnglishDigits(val);
+    // Allow digits and at most one decimal point
+    const cleaned = englishVal.replace(/[^0-9.]/g, '');
+    const parts = cleaned.split('.');
+    const sanitized = parts.length > 2 ? `${parts[0]}.${parts.slice(1).join('')}` : cleaned;
+
+    setPriceInput(sanitized);
+    if (sanitized === "" || isNaN(Number(sanitized))) {
+      setStartPrice("");
+    } else {
+      setStartPrice(Number(sanitized));
+    }
+  };
+
+  const handleQuickPriceAdjust = (delta: number) => {
+    const current = typeof startPrice === "number" ? startPrice : 0;
+    const next = Math.max(0, current + delta);
+    setPriceInput(String(next));
+    setStartPrice(next);
+  };
   const [plans, setPlans] = useState<FeaturePlan[]>([]);
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -181,6 +211,8 @@ export const CreateAuctionModal: React.FC<CreateAuctionModalProps> = ({
 
       if (res.success) {
         setSuccessMessage("تم إنشاء المزاد بنجاح ونشره على المنصة!");
+        setPriceInput("");
+        setStartPrice("");
         setTimeout(() => {
           if (onSuccess) onSuccess();
           onClose();
@@ -319,18 +351,54 @@ export const CreateAuctionModal: React.FC<CreateAuctionModalProps> = ({
               {/* سعر البداية والموقع */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#D1D1D1] mb-1.5">
-                    سعر بداية المزاد (Start Price) *
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    min={0}
-                    value={startPrice}
-                    onChange={(e) => setStartPrice(e.target.value === "" ? "" : Number(e.target.value))}
-                    placeholder="0"
-                    className="w-full px-4 py-3 rounded-xl bg-[#161616] border border-[#2B2B2B] text-white text-sm placeholder:text-[#555] focus:outline-none focus:border-[#FFFFFF] transition-colors font-bold font-mono"
-                  />
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block text-xs font-bold text-[#D1D1D1]">
+                      سعر بداية المزاد (Start Price) *
+                    </label>
+                    <span className="text-[11px] text-amber-300 font-bold font-mono">د.ك</span>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      required
+                      value={priceInput}
+                      onChange={(e) => handlePriceChange(e.target.value)}
+                      placeholder="أدخل السعر (مثال: 500)"
+                      className="w-full pl-12 pr-4 py-3 rounded-xl bg-[#161616] border border-[#2B2B2B] text-white text-sm placeholder:text-[#555] focus:outline-none focus:border-[#FFFFFF] transition-colors font-bold font-mono"
+                    />
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[#8E8E8E] font-mono pointer-events-none">
+                      د.ك
+                    </span>
+                  </div>
+
+                  {/* أزرار زيادة سريعة وتحكم سلس بالمبلغ */}
+                  <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                    <span className="text-[10px] text-[#777] shrink-0">زيادة سريعة:</span>
+                    {[50, 100, 250, 500, 1000].map((inc) => (
+                      <button
+                        key={inc}
+                        type="button"
+                        onClick={() => handleQuickPriceAdjust(inc)}
+                        className="px-2 py-1 rounded-lg text-[11px] font-bold font-mono bg-[#1C1C1C] hover:bg-white hover:text-black border border-[#2E2E2E] transition-all cursor-pointer"
+                        title={`إضافة ${inc} د.ك`}
+                      >
+                        +{inc}
+                      </button>
+                    ))}
+                    {priceInput !== "" && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPriceInput("");
+                          setStartPrice("");
+                        }}
+                        className="px-2 py-1 rounded-lg text-[10px] text-zinc-400 hover:text-white bg-transparent hover:bg-white/5 transition-all cursor-pointer mr-auto"
+                      >
+                        مسح
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div>
