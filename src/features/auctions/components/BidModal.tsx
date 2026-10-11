@@ -26,6 +26,7 @@ import { auctionsService } from "../services/auctionsService";
 import { useAuctionRealtime, parseAuctionEndDate } from "../hooks/useAuctionRealtime";
 import { SellerAuctionDecisionBox } from "./SellerAuctionDecisionBox";
 import { useAuth } from "@/features/auth/context/AuthContext";
+import { useToast } from "@/core/context/ToastContext";
 import type { AuctionItem } from "../types";
 
 interface BidModalProps {
@@ -43,6 +44,7 @@ export const BidModal: React.FC<BidModalProps> = ({
   onBidSuccess,
   onAuctionAccepted,
 }) => {
+  const { toast } = useToast();
   const { isAuthenticated, user } = useAuth();
   const [auction, setAuction] = useState<AuctionItem | null>(initialAuction);
   const [activeImageIdx, setActiveImageIdx] = useState(0);
@@ -146,16 +148,19 @@ export const BidModal: React.FC<BidModalProps> = ({
         addLocalBid(amount, user?.fullName || 'حساب مشتري', user?.id ? String(user.id) : undefined);
         const nextMin = amount + (auction.minIncrement || 50);
         setAmount(nextMin);
-        setSuccessMessage(res.data?.message || `تم تقديم سومتك بنجاح بمبلغ ${amount.toLocaleString()} ${auction.currency}!`);
+        const successMsg = res.data?.message || `تم تقديم سومتك بنجاح بمبلغ ${amount.toLocaleString()} ${auction.currency}!`;
+        setSuccessMessage(successMsg);
+        toast.success(successMsg, "نجاح المزايدة");
         if (onBidSuccess) {
           onBidSuccess(amount);
         }
       } else {
-        if (res.statusCode === 403 || String(res.message).includes('403')) {
-          setErrorMessage("غير مصرح لك بالمزايدة يجب ان يكون حساب نوعه مشتري");
-        } else {
-          setErrorMessage(res.message || "تعذر إرسال السومة، تأكد من أن المبلغ أعلى من السومة الحالية.");
-        }
+        const errorText =
+          res.statusCode === 403 || String(res.message).includes('403')
+            ? "غير مصرح لك بالمزايدة يجب ان يكون حساب نوعه مشتري"
+            : res.message || "تعذر إرسال السومة، تأكد من أن المبلغ أعلى من السومة الحالية.";
+        setErrorMessage(errorText);
+        toast.error(errorText, "تعذر المزايدة");
       }
     } catch (err) {
       setErrorMessage(err instanceof Error ? err.message : "فشل في الاتصال بخادم المزادات");
@@ -186,13 +191,15 @@ export const BidModal: React.FC<BidModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-md animate-fade-in" dir="rtl">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/90 backdrop-blur-md animate-fade-in" dir="rtl">
       <div
-        className="relative w-full max-w-4xl rounded-[28px] bg-[#0E0E0E] border border-[#2B2B2B] shadow-2xl text-white overflow-hidden max-h-[92vh] flex flex-col"
+        className="relative w-full max-w-4xl rounded-t-[32px] sm:rounded-[28px] bg-[#0E0E0E] border-t sm:border border-[#2B2B2B] shadow-2xl text-white overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 duration-300"
         style={{
           boxShadow: "0 25px 70px rgba(0, 0, 0, 0.95), 0 0 40px rgba(255, 255, 255, 0.05)",
         }}
       >
+        {/* شريط السحب على الهاتف المحمول (Mobile Drag Handle) */}
+        <div className="w-12 h-1.5 bg-zinc-700/80 rounded-full mx-auto mt-2.5 -mb-1 sm:hidden shrink-0" />
         {/* شريط الإغلاق والعنوان وحالة SignalR */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#222222] bg-[#121212]/80 shrink-0">
           <div className="flex items-center gap-3">

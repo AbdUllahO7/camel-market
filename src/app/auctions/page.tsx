@@ -1,14 +1,16 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from "react";
-import { Search, Plus, Gavel, RefreshCw, X, Filter } from "lucide-react";
+import { Search, Plus, Gavel, RefreshCw, X, Sparkles } from "lucide-react";
 import { TopBar } from "@/features/home/components/TopBar";
 import { Navbar } from "@/features/home/components/Navbar";
 import { Footer } from "@/features/home/components/Footer";
 import { SectionDivider } from "@/features/home/components/SectionDivider";
 import { AuctionCard } from "@/features/auctions/components/AuctionCard";
+import { AuctionCardSkeleton } from "@/features/auctions/components/AuctionCardSkeleton";
 import { BidModal } from "@/features/auctions/components/BidModal";
 import { CreateAuctionModal } from "@/features/auctions/components/CreateAuctionModal";
+import { BackToTop } from "@/core/components/BackToTop";
 import { auctionsService } from "@/features/auctions/services/auctionsService";
 import { useAuth } from "@/features/auth/context/AuthContext";
 import type { AuctionItem } from "@/features/auctions/types";
@@ -111,32 +113,41 @@ export default function AuctionsPage() {
 
   const hasActiveFilters = debouncedSearch.trim().length > 0 || statusFilter !== null;
 
+  // إحصائيات التبويبات الديناميكية
+  const totalAllCount = allAuctions.length;
+  const totalActiveCount = allAuctions.filter((a) => Number(a.status) === 2).length;
+  const totalEndedCount = allAuctions.filter((a) => Number(a.status) === 3 || Number(a.status) === 4).length;
+
   return (
     <div className="min-h-screen bg-[#000000] text-white flex flex-col overflow-x-hidden selection:bg-[#616161] selection:text-white" dir="rtl">
-      {/* 1. الشريط العلوي وشريط التنقل */}
+      {/* 1. الشريط العلوي وشريط التنقل الزجاجي المثبت */}
       <TopBar />
-      <div className="relative w-full border-b border-[#222222]">
+      <div className="sticky top-0 z-40 w-full backdrop-blur-xl bg-black/85 border-b border-[#222222] transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
         <div className="max-w-[1620px] mx-auto px-4 sm:px-8 py-3">
           <Navbar />
         </div>
       </div>
 
-      {/* 2. رأس صفحة المزادات */}
-      <div className="relative py-16 lg:py-24 px-4 sm:px-8 bg-gradient-to-b from-[#121212] via-[#080808] to-[#000000] border-b border-[#222222]">
-        <div className="max-w-[1620px] mx-auto flex flex-col items-center text-center gap-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold bg-white/10 text-[#D1D1D1] border border-white/10">
+      {/* 2. رأس صفحة المزادات بتأثيرات الإضاءة الفخمة */}
+      <div className="relative py-16 lg:py-24 px-4 sm:px-8 bg-gradient-to-b from-[#121212] via-[#080808] to-[#000000] border-b border-[#222222] overflow-hidden">
+        {/* توهج إشعاعي خلفي ناعم */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-amber-500/5 blur-[120px] pointer-events-none rounded-full" />
+
+        <div className="relative max-w-[1620px] mx-auto flex flex-col items-center text-center gap-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold bg-white/10 text-[#D1D1D1] border border-white/10 shadow-lg backdrop-blur-md">
             <Gavel className="w-4 h-4 text-amber-300" />
             <span>منظومة المزادات الحية الرسمية</span>
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            سوق المزادات الإلكتروني للخيول الأصيلة
+            سوق المزادات الإلكتروني للخيول والإبل الأصيلة
           </h1>
 
           <SectionDivider />
 
           <p className="text-sm sm:text-base text-[#8E8E8E] max-w-2xl mt-1 leading-relaxed">
-            زايد بثقة وشفافية كاملة على أفضل السلالات، مع إمكانية المزايدة اللحظية ومتابعة البثوث.
+            زايد بثقة وشفافية كاملة على أفضل السلالات، مع إمكانية المزايدة اللحظية والعداد التنازلي المباشر.
           </p>
 
           {/* شريط البحث وزر إضافة مزاد */}
@@ -147,7 +158,7 @@ export default function AuctionsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="ابحث باسم الإبل، السلالة، أو موقع المزاد ..."
-                className="w-full pl-10 pr-10 py-3.5 rounded-2xl bg-[#181818] border border-[#333333] text-white text-sm placeholder:text-[#666] focus:outline-none focus:border-[#FFFFFF] transition-colors"
+                className="w-full pl-10 pr-10 py-3.5 rounded-2xl bg-[#181818] border border-[#333333] text-white text-sm placeholder:text-[#666] focus:outline-none focus:border-amber-400/80 focus:shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all"
               />
               <Search className="w-4 h-4 text-[#8E8E8E] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               {searchQuery && (
@@ -167,7 +178,7 @@ export default function AuctionsPage() {
               <button
                 type="button"
                 onClick={() => setIsCreateModalOpen(true)}
-                className="w-full sm:w-auto px-6 py-3.5 rounded-2xl text-sm font-bold text-black bg-gradient-to-r from-[#FFFFFF] via-[#F7F7F7] to-[#D1D1D1] hover:scale-105 transition-all shadow-[0_4px_20px_rgba(255,255,255,0.2)] flex items-center justify-center gap-2 cursor-pointer shrink-0"
+                className="w-full sm:w-auto px-6 py-3.5 rounded-2xl text-sm font-bold text-black bg-gradient-to-r from-[#FFFFFF] via-[#F7F7F7] to-[#D1D1D1] hover:scale-105 active:scale-95 transition-all shadow-[0_4px_20px_rgba(255,255,255,0.2)] flex items-center justify-center gap-2 cursor-pointer shrink-0"
               >
                 <Plus className="w-4 h-4" />
                 <span>إنشاء مزاد جديد</span>
@@ -179,62 +190,94 @@ export default function AuctionsPage() {
 
       {/* 3. تصنيفات التبويب وشبكة المزادات */}
       <main className="max-w-[1620px] mx-auto w-full px-4 sm:px-8 py-12 flex-1">
-        {/* أزرار التصفية: الكل (null), نشط (2), منتهي (3) */}
+        {/* أزرار التصفية والتبويبات الأفقية القابلة للسحب */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8 border-b border-[#222222] pb-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => handleStatusChange(null)}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                statusFilter === null
-                  ? "bg-white text-black shadow-md"
-                  : "bg-[#141414] text-[#D1D1D1] hover:bg-[#202020]"
-              }`}
-            >
-              كافة المزادات
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleStatusChange(2)}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                statusFilter === 2
-                  ? "bg-emerald-500 text-black shadow-md"
-                  : "bg-[#141414] text-[#D1D1D1] hover:bg-[#202020]"
-              }`}
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
-              <span>المباشرة الآن (Active)</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleStatusChange(3)}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                statusFilter === 3
-                  ? "bg-white text-black shadow-md"
-                  : "bg-[#141414] text-[#D1D1D1] hover:bg-[#202020]"
-              }`}
-            >
-              المزادات المنتهية (Ended)
-            </button>
-
-            {hasActiveFilters && (
+          <div className="w-full sm:w-auto overflow-x-auto no-scrollbar py-1">
+            <div className="flex items-center gap-2 min-w-max">
+              {/* تبويب: كافة المزادات مع عداد */}
               <button
                 type="button"
-                onClick={handleClearFilters}
-                className="px-3 py-2 rounded-xl text-xs font-semibold text-amber-300 hover:text-white bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 transition-colors flex items-center gap-1 cursor-pointer"
-                title="إلغاء كافة الفلاتر والبحث"
+                onClick={() => handleStatusChange(null)}
+                className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                  statusFilter === null
+                    ? "bg-white text-black shadow-md scale-102"
+                    : "bg-[#141414] text-[#D1D1D1] hover:bg-[#202020]"
+                }`}
               >
-                <X className="w-3.5 h-3.5" />
-                <span>إلغاء التصفية</span>
+                <span>كافة المزادات</span>
+                {totalAllCount > 0 && (
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-[11px] font-mono font-bold transition-colors ${
+                      statusFilter === null ? "bg-black/15 text-black" : "bg-white/10 text-[#D1D1D1]"
+                    }`}
+                  >
+                    {totalAllCount}
+                  </span>
+                )}
               </button>
-            )}
+
+              {/* تبويب: المباشرة الآن مع عداد */}
+              <button
+                type="button"
+                onClick={() => handleStatusChange(2)}
+                className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                  statusFilter === 2
+                    ? "bg-emerald-500 text-black shadow-md scale-102"
+                    : "bg-[#141414] text-[#D1D1D1] hover:bg-[#202020]"
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
+                <span>المباشرة الآن (Active)</span>
+                {totalActiveCount > 0 && (
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-[11px] font-mono font-bold transition-colors ${
+                      statusFilter === 2 ? "bg-black/20 text-black" : "bg-emerald-500/20 text-emerald-400"
+                    }`}
+                  >
+                    {totalActiveCount}
+                  </span>
+                )}
+              </button>
+
+              {/* تبويب: المزادات المنتهية مع عداد */}
+              <button
+                type="button"
+                onClick={() => handleStatusChange(3)}
+                className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                  statusFilter === 3
+                    ? "bg-white text-black shadow-md scale-102"
+                    : "bg-[#141414] text-[#D1D1D1] hover:bg-[#202020]"
+                }`}
+              >
+                <span>المزادات المنتهية (Ended)</span>
+                {totalEndedCount > 0 && (
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-[11px] font-mono font-bold transition-colors ${
+                      statusFilter === 3 ? "bg-black/15 text-black" : "bg-white/10 text-[#D1D1D1]"
+                    }`}
+                  >
+                    {totalEndedCount}
+                  </span>
+                )}
+              </button>
+
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={handleClearFilters}
+                  className="px-3.5 py-2.5 rounded-xl text-xs font-semibold text-amber-300 hover:text-white bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
+                  title="إلغاء كافة الفلاتر والبحث"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  <span>إلغاء التصفية</span>
+                </button>
+              )}
+            </div>
           </div>
 
-          <div className="flex items-center gap-3 text-xs sm:text-sm text-[#8E8E8E]">
+          <div className="flex items-center gap-3 text-xs sm:text-sm text-[#8E8E8E] mr-auto sm:mr-0">
             {!isLoading && (
-              <span className="bg-[#141414] px-3 py-1.5 rounded-lg border border-[#2B2B2B] text-[#D1D1D1]">
+              <span className="bg-[#141414] px-3 py-1.5 rounded-lg border border-[#2B2B2B] text-[#D1D1D1] font-mono">
                 {auctions.length > 0 ? `النتائج: ${auctions.length} مزاد` : "لا توجد نتائج"}
               </span>
             )}
@@ -245,20 +288,21 @@ export default function AuctionsPage() {
               className="p-2.5 rounded-xl bg-[#141414] hover:bg-[#202020] border border-[#2B2B2B] text-[#D1D1D1] hover:text-white transition-colors cursor-pointer"
               title="تحديث القائمة"
             >
-              <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
+              <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin text-amber-300" : ""}`} />
             </button>
           </div>
         </div>
 
-        {/* شبكة كروت المزادات */}
+        {/* شبكة كروت المزادات أو الهيكل العظمي (Skeleton Loading) */}
         {isLoading && auctions.length === 0 ? (
-          <div className="py-24 flex flex-col items-center justify-center gap-3 text-zinc-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#8E8E8E]" />
-            <span className="text-sm">جاري تحميل المزادات من السيرفر...</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {[1, 2, 3, 4, 5, 6].map((key) => (
+              <AuctionCardSkeleton key={key} />
+            ))}
           </div>
         ) : auctions.length === 0 ? (
           <div className="py-24 flex flex-col items-center justify-center gap-4 text-center">
-            <div className="w-16 h-16 rounded-full bg-white/5 border border-[#333] flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-white/5 border border-[#333] flex items-center justify-center shadow-lg">
               <Gavel className="w-8 h-8 text-[#8E8E8E]" />
             </div>
             <h3 className="text-lg font-bold text-white">لا توجد مزادات مطابقة حالياً</h3>
@@ -283,6 +327,7 @@ export default function AuctionsPage() {
               <AuctionCard
                 key={auction.id}
                 auction={auction}
+                searchHighlight={debouncedSearch}
                 onBidClick={(auc) => setActiveBidAuction(auc)}
                 onViewDetails={(auc) => setActiveBidAuction(auc)}
               />
@@ -306,9 +351,11 @@ export default function AuctionsPage() {
         onSuccess={fetchAuctions}
       />
 
-      {/* 5. الفوتر */}
+      {/* 5. زر الصعود لأعلى الصفحة */}
+      <BackToTop />
+
+      {/* 6. الفوتر */}
       <Footer />
     </div>
   );
 }
-

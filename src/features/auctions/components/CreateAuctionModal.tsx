@@ -6,6 +6,7 @@ import { X, Plus, Upload, CheckCircle2, AlertCircle, Sparkles, Trash2, Wallet } 
 import { auctionsService } from "../services/auctionsService";
 import { WalletModal } from "@/features/wallet/components/WalletModal";
 import { useAuth } from "@/features/auth/context/AuthContext";
+import { useToast } from "@/core/context/ToastContext";
 import type { FeaturePlan } from "@/features/auth/types";
 
 function normalizeArabicText(text: string): string {
@@ -46,6 +47,7 @@ export const CreateAuctionModal: React.FC<CreateAuctionModalProps> = ({
   onClose,
   onSuccess,
 }) => {
+  const { toast } = useToast();
   const { isAuthenticated, user } = useAuth();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -210,7 +212,9 @@ export const CreateAuctionModal: React.FC<CreateAuctionModalProps> = ({
       });
 
       if (res.success) {
-        setSuccessMessage("تم إنشاء المزاد بنجاح ونشره على المنصة!");
+        const succMsg = "تم إنشاء المزاد بنجاح ونشره على المنصة!";
+        setSuccessMessage(succMsg);
+        toast.success(succMsg, "تم النشر بنجاح");
         setPriceInput("");
         setStartPrice("");
         setTimeout(() => {
@@ -248,13 +252,16 @@ export const CreateAuctionModal: React.FC<CreateAuctionModalProps> = ({
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in" dir="rtl">
+      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in" dir="rtl">
         <div
-          className="relative w-full max-w-2xl rounded-[30px] bg-[#0E0E0E] border border-[#2B2B2B] p-6 sm:p-8 shadow-2xl text-white overflow-hidden max-h-[92vh] flex flex-col"
+          className="relative w-full max-w-2xl rounded-t-[32px] sm:rounded-[30px] bg-[#0E0E0E] border-t sm:border border-[#2B2B2B] p-6 sm:p-8 shadow-2xl text-white overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-0 duration-300"
           style={{
             boxShadow: "0 30px 80px rgba(0, 0, 0, 0.95), 0 0 50px rgba(255, 255, 255, 0.05)",
           }}
         >
+          {/* شريط السحب على الهاتف المحمول (Mobile Drag Handle) */}
+          <div className="w-12 h-1.5 bg-zinc-700/80 rounded-full mx-auto -mt-2 mb-3 sm:hidden shrink-0" />
+
           {/* زر الإغلاق */}
           <button
             type="button"

@@ -3,6 +3,8 @@ import { Cairo } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/i18n";
 import { AuthProvider } from "@/features/auth/context/AuthContext";
+import { ToastProvider } from "@/core/context/ToastContext";
+import { BackToTop } from "@/core/components/BackToTop";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -90,7 +92,10 @@ export default function RootLayout({
       <body className="min-h-screen bg-[#000000] text-white antialiased">
         <LanguageProvider>
           <AuthProvider>
-            {children}
+            <ToastProvider>
+              {children}
+              <BackToTop />
+            </ToastProvider>
           </AuthProvider>
         </LanguageProvider>
       </body>

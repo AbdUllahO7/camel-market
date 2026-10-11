@@ -50,8 +50,8 @@ function HomeContent() {
 
       {/* 2. الحاوية المشتركة للهيرو وشريط التنقل العائم فوق الصورة تماماً كما في فيجما */}
       <div className="relative w-full">
-        {/* شريط التنقل الشفاف العائم فوق صورة الهيرو */}
-        <div className="absolute top-2 sm:top-4 left-0 right-0 z-40">
+        {/* شريط التنقل الزجاجي الذكي المثبت (Sticky Glassmorphic Header) */}
+        <div className="sticky top-0 z-40 w-full backdrop-blur-xl bg-black/75 transition-all duration-300">
           <Navbar onOpenSubscription={() => setIsSubscriptionModalOpen(true)} />
         </div>
 

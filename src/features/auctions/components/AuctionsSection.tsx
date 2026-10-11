@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Gavel, Plus, ArrowLeft, Sparkles, RefreshCw } from "lucide-react";
 import { SectionDivider } from "@/features/home/components/SectionDivider";
 import { AuctionCard } from "./AuctionCard";
+import { AuctionCardSkeleton } from "./AuctionCardSkeleton";
 import { BidModal } from "./BidModal";
 import { CreateAuctionModal } from "./CreateAuctionModal";
 import { auctionsService } from "../services/auctionsService";
@@ -120,11 +121,12 @@ export const AuctionsSection = () => {
           </div>
         </div>
 
-        {/* 3. شبكة كروت المزادات */}
+        {/* 3. شبكة كروت المزادات أو الهيكل العظمي */}
         {isLoading && auctions.length === 0 ? (
-          <div className="py-20 flex flex-col items-center justify-center gap-3 text-zinc-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#8E8E8E]" />
-            <span className="text-sm">جاري تحميل المزادات الحية...</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {[1, 2, 3].map((key) => (
+              <AuctionCardSkeleton key={key} />
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
